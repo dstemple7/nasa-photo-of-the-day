@@ -3,16 +3,23 @@ import axios from 'axios'
 import "./App.css";
 import {BASE_URL} from './constants'
 import {NASA_KEY} from './constants/secrets'
-import DatePicker2 from './datepicker'
+
+const initialFormValues = {
+  date: '',
+}
 
 function App() {
   const [nasaData, nasaResponse] = useState([])
-
-  //earlies data is 1995-06-16
-  const currentDate = ''
+  const [formValues, setFormValues] = useState(initialFormValues)
   
+  const onInputChange = evt => {
+    const inputName = evt.target.name
+    const inputValue = evt.target.value
+    setFormValues({ ...formValues, [inputName]: inputValue })
+  }
+ 
   useEffect (() => {
-    axios.get(`${BASE_URL}?api_key=${NASA_KEY}&date=${currentDate}`)
+    axios.get(`${BASE_URL}?api_key=${NASA_KEY}&date=${initialFormValues.date}`)
       .then(res => {
         nasaResponse(res.data)
         })
@@ -20,11 +27,22 @@ function App() {
         debugger
         })
   }, [])
+ 
+  function refreshPage() {
+    window.location.reload(false);
+  }
   
   return (
     <div className="App">
-      <h6>{nasaData.date}</h6>
+      <div>
+        <label>Change Date:&nbsp;
+          <input name='date' value={formValues.date} onChange={onInputChange}/>
+        </label>
+        <button onClick={axios.get(`${BASE_URL}?api_key=${NASA_KEY}&date=${formValues.date}`) .then(res => { nasaResponse(res.data)}).catch(err => {debugger})}>Submit</button>
+      </div>
+      <br></br>
       <h1>{nasaData.title}</h1>
+      <h6><a href={nasaData.hdurl} target="blank">See HD!</a></h6>
       <span role="img" aria-label='go!'>
         <img src={nasaData.url} alt="NASA pic of the day"></img>
       </span>
