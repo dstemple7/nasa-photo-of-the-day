@@ -38,11 +38,12 @@ function App() {
         <label>Change Date:&nbsp;
           <input name='date' value={formValues.date} onChange={onInputChange}/>
         </label>
-        <button onClick={axios.get(`${BASE_URL}?api_key=${NASA_KEY}&date=${formValues.date}`) .then(res => { nasaResponse(res.data)}).catch(err => {debugger})}>Submit</button>
+        <button class="hidden" onClick={axios.get(`${BASE_URL}?api_key=${NASA_KEY}&date=${formValues.date}`) .then(res => { nasaResponse(res.data)}).catch(err => {debugger})}></button>
+        <div class="ital">"Format: YYYY-MM-DD"</div>
       </div>
       <br></br>
       <h1>{nasaData.title}</h1>
-      <h6><a href={nasaData.hdurl} target="blank">See HD!</a></h6>
+      <h4><a href={nasaData.hdurl} target="blank">See HD!</a></h4>
       <span role="img" aria-label='go!'>
         <img src={nasaData.url} alt="NASA pic of the day"></img>
       </span>
